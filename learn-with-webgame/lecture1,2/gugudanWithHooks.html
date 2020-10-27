@@ -1,0 +1,79 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <script src = "https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    </head>
+    <body>
+        <div id = "root"></div>
+        <script type = "text/babel">
+        // # react에서 사용하지 못하는 html 속성 
+        //  1) react에서 태그 안에 class를 쓰지 못한다. 대신 className으로 사용
+        //  2) for은 htmlFor로 사용해야 한다. 
+
+        // # hooks의 탄생 : 컴포넌트를 함수형으로 생성하면서 + state와 ref도 쓰고싶어!
+        // hooks를 사용하지 않고 class 컴포넌트만을 사용할 때 state가 변하면-> 렌더링이 계속 된다 = render() 함수가 계속 실행된다
+        // hooks를 사용해도 계속 렌더링 되는데 이때는 아예함수가 다시 실행된다. = GuGuDan() 계속 실행 -> 좀 더 느릴수 있음 (나중에 최적화,,)
+        const GuGuDan = () => {
+            // 1. hooks에서 state 초기 선언 
+            // const [state명, setState명] = React.useState(초기값);
+            // 각각 전용 setState가 생성된다. 
+            // state를 사용할 때, this.state.state명 할필요 없이 state명으로 바로 접근할 수 있다.
+            const [first, setFirst] = React.useState(Math.ceil(Math.random()*9));
+            const [second, setSecond] = React.useState(Math.ceil(Math.random()*9));
+            const [value, setValue] = React.useState('');
+            const [result, setResult] = React.useState('');
+
+            // 3. ref
+            const inputRef = React.useRef(null); // 돔에 접근할 때 useRef를 이용한다.
+            // 사용할 때는 inputRef.current.focus() 와 같이 current를 추가해줘야 한다.
+
+
+            // 4. 메소드 (클래스 내무 메소드가 아니기 때문에 앞에 const 필요)
+            // 분리되는 메소드들은 동일하지만, setState부분만 state별 별개 메소드로 수정하면 된다.
+            // 사용할때 this.을 붙여줄 필요 없다. 
+            const onChange = (e) => {
+                setValue(e.target.value)
+            }
+            const onSubmit = (e) => { // form을 submit 했을 때 -> button을 누르는 순간 submit 됨
+                e.preventDefault(); 
+                // preventDefault가 없으면 계속 다시 랜더링 : 아예 컴포넌트를 다시 로딩하는거 같아 
+                // onsubmit을 통해 submit하면 이벤트 완료후 계속 refresh 된다. -> 이를 막는게 preventDefault의 역할이다<div class=""></div>
+                // preventDefault : 속성을 중단시킨다. 
+                if (parseInt(value) == first * second) {
+                    // 이전 state값을 쓰는 경우에는 아래와 같이 사용한다.
+                    setResult((prevResult) => {
+                        return `정답 ${prevResult}`
+                    });
+                    setFirst(Math.ceil(Math.random()*9));
+                    setSecond(Math.ceil(Math.random()*9));
+                    setValue('');
+                    inputRef.current.focus();
+                } else {
+                    setResult(`땡`);
+                    setValue('');
+                    inputRef.current.focus();
+                }
+            };
+            
+            // 2. return
+            // class component에서 render내의 return 값이 그냥 return으로 보내진다.
+            return (
+                <React.Fragment>
+                    <div>{first} 곱하기 {second}은?</div>
+                    <form onSubmit = {onSubmit}>
+                        <input ref = {inputRef} type = "number" value = {value} onChange = {onChange}/>
+                        <button type = "submit">입력!</button> 
+                    </form>
+                    <div>{result}</div>
+                </React.Fragment>
+            );
+        }
+            
+        </script>
+        <script type = "text/babel">
+            ReactDOM.render(<GuGuDan/>, document.querySelector('#root'));
+        </script>
+    </body>
+</html>

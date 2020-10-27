@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <!-- 1. react & reactDOM script 불러오기 -->
+        <!-- 리액트 설치 -->
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <!-- jsx 문법을 쓰기위한 babel 설치 -->
+        <script src = "https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    </head>
+    <!-- 2. 태그들 화면에 그려주기 -->
+    <body>
+        <div id = "root">
+            <!-- ** 리액트는 컴포넌트들을 랜더링할 root 태그가 하나 필요하다. -->
+        </div>
+        <script type = "text/babel">
+            // 3. react가 LickButton이라는 컴포넌트를 만들어
+            //   - 해당 컴포넌트는 버튼 태그를 만들 것이다. 
+
+            // 위 head에서 script로 설치한 react 때문에 React 객체를 사용할 수 있음
+            const e = React.createElement; // createElement = 태그를 만든다 
+            class LikeButton extends React.Component { // 클래스 하나가 컴포넌트 하나라고 볼 수 있다. 
+                // 그냥 태그와 컴포넌트를 구분하기 위해 컴포넌트는 대문자로 시작하게 만든다. 
+                constructor(props) {
+                    super(props);
+                    
+                    // 상태(state) : 바뀔 여지가 있는 부분  
+                    // 안변하는 부분은 그냥 태그로    
+                    this.state = {
+                        // 이 안에 기본 상태를 적어준다. 
+                        liked: false // object다! liked= false 아님! 
+                    };
+                }
+                render() {
+                    // * 이전 불편한 버전 
+                    // return e(
+                    //     'button', {onClick: () => {this.setState({liked: true})}, type: 'submit'}, 
+                    //     this.state.liked === true ? 'Liked':'Like'
+                    // ); // = <button>Like</button>인 태그를 만들겠다
+                    // // React.createElement로 생성한 객체 : e('태그명', html 속성, '태그 사이에 들어갈 string = 화면에 표시될 string')
+                    
+                    // * 태그 문법이 가능한 jsx 등장
+                    // jsx는 태그 사이 content부분에도 {}로 감싸주면 
+                    // return <button type = "submit" onClick = {()=> {this.setState({liked: true})}}> Like </button>
+                    return <button type = "submit" onClick = {()=> {this.setState({liked: true})}}> {this.state.liked === true ? 'Liked' : 'Like'} </button>
+                }
+            }
+        </script>
+        <script type = "text/babel">
+            // 4. #root에 LikeButton을 그린다. 
+            // 화면에 실제로 반영하기 위한 코드
+            // * 이전 불편한 버전 
+            // ReactDOM.render(e(LikeButton), document.querySelector('#root'));
+            // * 태그 문법이 가능한 jsx 등장
+            ReactDOM.render(<LikeButton/>, document.querySelector('#root'));
+            // like 버튼 여러개 만들고 싶으면 아래 처럼 = component 재사용 쉽게 가능 
+            ReactDOM.render(<div><LikeButton/><LikeButton/><LikeButton/></div>, document.querySelector('#root'));
+
+        </script>
+    </body>
+</html>
+<!-- 최종결과 -->
+<!-- 
+    <div id = "root">
+        <button>Like</button>
+    </div>
+-->

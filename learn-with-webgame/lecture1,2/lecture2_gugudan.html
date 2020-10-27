@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <script src = "https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    </head>
+    <body>
+        <div id = "root"></div>
+        <script type = "text/babel">
+            class GuGuDan extends React.Component {
+                // constructor(props) {
+                //     super(props);
+                //     // # 변할 것들은 다 state로 먼저 선언 
+                //     this.state = {
+                //         first: Math.ceil(Math.random() * 9),
+                //         second: Math.ceil(Math.random() * 9),
+                //         value: '',
+                //         result: '',
+                //     };
+                // }
+                
+                // # constructor 쓰지 않고 바로 state만 선언해줘도 ok
+                state = {
+                    first: Math.ceil(Math.random() * 9),
+                    second: Math.ceil(Math.random() * 9),
+                    value: '',
+                    result: '',
+                };
+                // # 이벤트 함수에 대한 내용은 js코드이기 때문에, 밖에 메소드로 분리해 주는게 깔끔하다. (아예 render 밖으로)
+                // 이때 메소드는 반드시 화살표 함수로 구현해야 한다. 
+                onSubmit = (e) => { // form을 submit 했을 때 -> button을 누르는 순간 submit 됨
+                    e.preventDefault(); 
+                    // preventDefault가 없으면 계속 다시 랜더링 : 아예 컴포넌트를 다시 로딩하는거 같아 
+                    // onsubmit을 통해 submit하면 이벤트 완료후 계속 refresh 된다. -> 이를 막는게 preventDefault의 역할이다<div class=""></div>
+                    // preventDefault : 속성을 중단시킨다. 
+                    if (parseInt(this.state.value) == this.state.first * this.state.second) {
+                        // parseInt(string) -> int로 형변환
+
+                        // # ** setState안에서 현재 state값을 사용하고 싶을 때는 아래와 같이 화살표 함수를 활용하고, 변경할 값은 return한다. 
+                        this.setState((prevState) => {
+                            // prevState은 예전상태값
+                            return {
+                                result: `${prevState.value} 정답!`,
+                                first: Math.ceil(Math.random()*9), // 정답이면 문제 변경
+                                second: Math.ceil(Math.random()*9),
+                                value: '' // 내가 입력한 값 지우기 
+                            }
+                        });
+                        this.input.focus();
+                    } else {
+                        this.setState({
+                            result: '땡',
+                            value: '' // 내가 입력한 값 지우기
+                        });
+                        this.input.focus();
+                    }
+                };
+                // # input 받는 칸의 값은 value이다. 바로바로 입력한다고 입력값이 쳐지지 않는다. 
+                // -> onChange일 때 마다, setState로 value 변경해줘야해
+                onChange = (inputValue) => {
+                    this.setState({value: inputValue.target.value})
+                }
+                input; // 그냥 변수 선언해 준것 
+                render() {
+                    console.log("랜더링");
+                    // *** setState를 실행할 때, render함수가 다시 시작된다. 
+                    // render안에 메소드를 선언해주면, rendering 될 때마다 계속 함수를 다시 선언한다 -> 비효율적! 메소드 정의는 따로 빼준다/
+            
+                    // reder의 리턴값은 태그로 꼭 묶어줘야 한다. -> Fragment를 통해 해결가능 (babel2를 설치한다면 <></>로도 구현 가능)
+                    return (
+                        <React.Fragment>
+                            <div>{this.state.first} 곱하기 {this.state.second}은?</div>
+                            <form onSubmit = {this.onSubmit}>
+                                <input ref = {(c) => {this.input = c;}} type = "number" value = {this.state.value} onChange = {this.onChange}/>
+                                <button type = "submit">입력!</button> 
+                            </form>
+                            <div>{this.state.result}</div>
+                        </React.Fragment>
+                    );
+                }
+                // input 태그 : <input type = "number, button, text등 다양한 입력형태가 있음" value = "초기값" onChange = {(변수명) => 변수명에는 입력받은 값이 담겨있다.}/>
+                // 기본이벤트 on** 알기 
+                // <button type = "submit"> : 버튼을 누르면 submit하는 것 : onSubmit 발생 
+                // input focus : input받는 칸에 커서가 깜빡거리게 선택하는 것 
+                // ??? dom에 직접접근 하고 싶을 때는 ref를 활용한다 .
+                // ## 알아볼것 (?)
+                // 1. ref
+                // 2. html 이벤트 on~
+                // 3. html 태그
+            }
+        </script>
+        <script type = "text/babel">
+            ReactDOM.render(<GuGuDan/>, document.querySelector('#root'));
+        </script>
+    </body>
+</html>
