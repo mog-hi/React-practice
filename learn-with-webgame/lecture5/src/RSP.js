@@ -55,6 +55,7 @@ class RSP extends Component {
             });
         }
     }
+
     // 고차함수
     // onClick은 원래 ()=>로 구현하는 함수이다. e.target을 위해서 e를 담아서 보낼 수도 있다
     // onClick메소드로 설정한 함수에 또 다른 인수를 받아와야 할 때, 아래 처럼 () => () =>로 구현할 수 있다.
