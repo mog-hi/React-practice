@@ -1,4 +1,4 @@
-import React, {useState, useReducer, useCallback} from 'react'
+import React, {useReducer, useCallback} from 'react'
 import Table from './Table'
 
 // action이름은 아래처럼 상수로 빼는게 규칙 
