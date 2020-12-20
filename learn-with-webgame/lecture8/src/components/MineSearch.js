@@ -84,7 +84,7 @@ const reducer = (state, action) => {
 }
 const MineSearch = () => {
     const [state, dispatch] = useReducer(reducer, initialState);
-    const value = useMemo(() => ({tableData: state.tableData, dispatch}), [state.tableData]);
+    const value = (() => ({tableData: state.tableData, dispatch}), [state.tableData]);
 
     return (
         <TableContext.Provider value={value}>

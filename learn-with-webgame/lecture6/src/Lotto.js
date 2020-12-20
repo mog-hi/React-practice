@@ -23,6 +23,7 @@ const Lotto = () => {
     // useMemo는 함수의 return값을 기억하고 있는거고
     // useCallback은 함수 자체를 기억하고 있는거다.
     const lottoNumbers = useMemo(() => getWinNumbers(), []);
+    
     const [winNumbers, setWinNumbers] = useState(lottoNumbers);
     const [winBalls, setWinBalls] = useState([]);
     const [bonus, setBonus] = useState(null);
